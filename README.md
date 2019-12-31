@@ -2,6 +2,7 @@
 Python plugin for Domoticz to add integration with [WLED](https://github.com/Aircoookie/WLED) project
 
 # All work done by  frustreermeneer, I just added support for RGBW LED's.
+I have never looked at a python script before, never mind edit one, there is most certainly a better way to implement the option for RGBW LED's but it works.
 
 ## BETA
 This is my first project in Python and my first GitHub repository. Expect errors, but feel free to try, and let me know what you think!
