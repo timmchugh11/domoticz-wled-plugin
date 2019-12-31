@@ -25,7 +25,13 @@
     <params>
 	<param field="Address" label="WLED IP Address" width="200px" required="true" default=""/>
 	<param field="Port" label="WLED UDP Sync Port" width="200px" required="true" default="21324"/>
-	<param field="Mode1" label="FX and palettes update interval (every x*10 secs)" width="200px" required="true" default="30"/>
+        <param field="Mode1" label="FX and palettes update interval (every x*10 secs)" width="200px" required="true" default="30"/>
+        <param field="Mode2" label="LED Type" width="200px">
+            <options>
+                <option label="RGB" value="0" default="true" />
+                <option label="RGBW" value="1"/>
+            </options>
+	</param>
 	<param field="Mode6" label="Debug" width="200px">
 	    <options>
 		<option label="None" value="0"  default="true" />
@@ -83,12 +89,13 @@ class BasePlugin:
 
             Domoticz.Device(Name="Palettes", Unit=1, TypeName="Selector Switch", Options=Options, Image=0).Create()
             Domoticz.Device(Name="Effects", Unit=2, TypeName="Selector Switch", Options=Options).Create()
-            Domoticz.Device(Name="Color & Brightness", Unit=3, Type=241,Subtype=2,Switchtype=7,Options=Options).Create()
             Domoticz.Device(Name="Presets", Unit=4, TypeName="Selector Switch", Options=Options).Create()
             Domoticz.Device(Name="FX Speed", Unit=5, Type=244,Subtype=62,Switchtype=7,Options=Options).Create()
             Domoticz.Device(Name="FX Intensity", Unit=6, Type=244,Subtype=62,Switchtype=7,Options=Options).Create()
-        else:
-            Domoticz.Log("devices existed already")
+            if Parameters["Mode2"] != "0":
+                         Domoticz.Device(Name="Color & Brightness", Unit=3, Type=241,Subtype=1,Switchtype=7,Options=Options).Create()
+            else:
+	                 Domoticz.Device(Name="Color & Brightness", Unit=3, Type=241,Subtype=2,Switchtype=7,Options=Options).Create()
 
         UpdatePresetsInDomoticz()
 
@@ -217,7 +224,7 @@ class BasePlugin:
                 Domoticz.Log( "Color:" + str(self.Color) )
                 parsedColor = json.loads(self.Color)
                 #UpdateDevice(3,1,self.Level,self.Color)
-                doWLEDRequest( "/win&FX=0&A="+str(int(self.Level*2.55))+"&R="+str(parsedColor["r"])+"&G="+str(parsedColor["g"])+"&B="+str(parsedColor["b"] ) )
+                doWLEDRequest( "/win&FX=0&A="+str(int(self.Level*2.55))+"&R="+str(parsedColor["r"])+"&G="+str(parsedColor["g"])+"&B="+str(parsedColor["b"])+"&W="+str(parsedColor["ww"] ) )
 
             if( Command == "On" ):
                 #UpdateDevice(3,1,self.Level) 		#,self.Color)
